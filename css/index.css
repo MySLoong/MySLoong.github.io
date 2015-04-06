@@ -85,6 +85,7 @@ body{
 	padding:0;
 }
 #navlist li{
+	background: url('menu_line.png') no-repeat scroll right 5px transparent;
 	float:left;
 	list-style:none;
 }
