@@ -37,7 +37,8 @@ var SavePage = function (pageName) {
 /////////////////////////////////////////////////////////////////////////////
 // 检测指定网页是否需要更新
 var PageCheck = function (pageNname) {
-    var flag = false;
+    var flag = true;
+    /*
     $.ajax({
         type: "post",
         url: "YHAshx/PageManager.ashx",
@@ -57,7 +58,7 @@ var PageCheck = function (pageNname) {
         error: function (xhr) {
             flag = true;
         }
-    });
+    });*/
     return flag;
 }
 
