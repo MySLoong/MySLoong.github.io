@@ -86,8 +86,8 @@ var LoadPage = function (pageName, pageUrl) {
             return false;
         }
         $("body").html("");
-        $("head").html("");
-        $("head").html(PageInfo.PageHead);
+        //$("head").html("");
+        //$("head").html(PageInfo.PageHead);
         $("body").html(PageInfo.PageBody);
         $("body").attr("class", pageName);
     }
