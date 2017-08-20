@@ -29,7 +29,7 @@ var SavePage = function (pageName) {
     // 写入当前页
     var PageInfo = {
         PageHead: $("head").html(),
-        PageBody: "<div class='body-contetn'>" + $("body").html() + "</div>",
+        PageBody: "<div class='body-contetn'>" + $("body").html() + "</div>"
     };
     eval("(localStorage." + pageName + "=JSON.stringify(PageInfo))");
 }
