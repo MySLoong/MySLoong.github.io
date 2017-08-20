@@ -29,7 +29,7 @@ var SavePage = function (pageName) {
     // 写入当前页
     var PageInfo = {
         PageHead: $("head").html(),
-        PageBody: $("body").html(),
+        PageBody: "<div class='body-contetn'>" + $("body").html() + "</div>",
     };
     eval("(localStorage." + pageName + "=JSON.stringify(PageInfo))");
 }
@@ -88,7 +88,13 @@ var LoadPage = function (pageName, pageUrl) {
         //$("body").html("");
         //$("head").html("");
         //$("head").html(PageInfo.PageHead);
-        $("body").html(PageInfo.PageBody);
+        $("body").append(PageInfo.PageBody);
+        var elearr = $(".body-content");
+        if(elearr.length > 0){
+            $(elearr[0]).fadeTo("slow",0.0,function(){
+                $(elearr[0]).remove();
+            });
+        }
         $("body").attr("class", pageName);
     }
 }
