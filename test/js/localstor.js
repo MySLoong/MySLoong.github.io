@@ -2,7 +2,7 @@
     Author ZhouJT(jason_zhou05@163.com) 2016
  */
 var Local = function () {
-    this.version = 10018;
+    this.version = 10023;
 };
 
 Local.prototype.loadJs = function (name, url, version, callback) {
@@ -101,7 +101,7 @@ Local.prototype.loadCss = function (name, url, version) {
 };
 
 Local.prototype.writeJs = function (name, text) {
-    var head = document.getElementsByTagName('HEAD').item(0);
+    var head = document.getElementsByTagName('body').item(0);
     var link = document.createElement("script");
     link.type = "text/javascript";
     link.className = name;
@@ -110,7 +110,7 @@ Local.prototype.writeJs = function (name, text) {
 }
 
 Local.prototype.writeCss = function (name, text) {
-    var head = document.getElementsByTagName('HEAD').item(0);
+    var head = document.getElementsByTagName('body').item(0);
     var link = document.createElement("style");
     link.type = "text/css";
     link.className = name;
