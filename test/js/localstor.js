@@ -2,7 +2,7 @@
     Author ZhouJT(jason_zhou05@163.com) 2016
  */
 var Local = function () {
-    this.version = 10017;
+    this.version = 10018;
 };
 
 Local.prototype.loadJs = function (name, url, version, callback) {
