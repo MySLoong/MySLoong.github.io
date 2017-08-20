@@ -85,7 +85,7 @@ var LoadPage = function (pageName, pageUrl) {
         if (typeof strName == "string" && strName == pageName) {
             return false;
         }
-        $("body").html("");
+        //$("body").html("");
         //$("head").html("");
         //$("head").html(PageInfo.PageHead);
         $("body").html(PageInfo.PageBody);
