@@ -110,8 +110,8 @@ $(function () {
         return false;
     }
     $(".menu-1").find("li").unbind("click").bind("click", liClick);
-    var m = $("#fh5co-offcanvas").find("ul");
-    if (m.length > 0) {
-        $("#fh5co-offcanvas").find("li").unbind("click").bind("click", liClick);
-    }
+    //var m = $("#fh5co-offcanvas").find("ul");
+    //if (m.length > 0) {
+    //    $("#fh5co-offcanvas").find("li").unbind("click").bind("click", liClick);
+    //}
 });
