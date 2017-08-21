@@ -30,7 +30,8 @@ var SavePage = function (pageName,pageVersion) {
     // 写入当前页
     var PageInfo = {
         PageHead: $("head").html(),
-        PageBody: $("body").html()
+        PageContent: $(".page-content").html(),
+        PageScript:$(".page-script").html()
     };
     eval("(localStorage." + pageName + "=JSON.stringify(PageInfo))");
 }
@@ -90,8 +91,9 @@ var LoadPage = function (pageName, pageUrl) {
         //$("head").html("");
         //$("head").html(PageInfo.PageHead);
         $("body").attr("class", pageName);
-        $("body").attr("version", PageList[pageName].PageVersion)
-        $("body").html(PageInfo.PageBody);
+        $("body").attr("version", PageList[pageName].PageVersion);
+        $(".page-content").html(PageInfo.PageContent);
+        $(".page-script").html(PageInfo.PageScript);
     }
 }
 
@@ -101,10 +103,15 @@ $(function () {
         var pageName = $(this).find("a").attr("href").replace(".html", "").replace(/-/g, "_");
         LoadPage(pageName, $(this).find("a").attr("href"));
         if ($(this).find(".sub").length <= 0) {
+            $(".active").removeClass("active");
             $(this).attr("class", "active");
         }
         window.location.href = window.location.href + "#" + pageName;
         return false;
     }
-    $(".menu-1").find("li").one("click", liClick);
+    $(".menu-1").find("li").unbind("click").bind("click", liClick);
+    var m = $("#fh5co-offcanvas").find("ul");
+    if (m.length > 0) {
+        $("#fh5co-offcanvas").find("li").unbind("click").bind("click", liClick);
+    }
 });

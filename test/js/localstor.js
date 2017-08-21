@@ -1,37 +1,41 @@
 /*
    Author ZhouJT(jason_zhou05@163.com) 2016
 */
-var Local = function () {
-    this.version = 10065;
+var Local = function (power) {
+    this.version = 10093;
+    if (typeof power == "string") {
+        this.power = power;
+    }
+    else {
+        this.power = "private";
+    }
 };
 
 Local.prototype.loadJs = function (name, url, version, callback) {
     var self = this;
-    
+
     if (window.localStorage) {
         var xhr;
         var js = localStorage.getItem(name);
         // 如果没有版本更新，检测是否已经创建标签
+        var link = document.getElementsByClassName(name);
         if (js != null && js.length > 0) {
-            var link = document.getElementsByClassName(name);
-            if (link.length > 0) {
-                console.log("link" + link[0].getAttribute("version"));
-                if (link[0].getAttribute("version") == version) {
-                    if (callback != null) {
-                        callback();
-                    }
-                    return;
+            if (link.length > 0 && link[0].getAttribute("version") == version) {
+                if (callback != null) {
+                    callback();
                 }
+                return;
             }
         }
-        if (js == null || js.length == 0 || version != localStorage.getItem(name + "version")) {
+        if (js == null || js.length == 0 || version != localStorage.getItem(name + "version") ||
+            (link.length > 0 && link[0].getAttribute("version") != version)) {
             if (window.ActiveXObject) {
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
             } else if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
             }
             if (xhr != null) {
-                xhr.open("GET", url);
+                xhr.open("GET", url + "?v=" + version);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200) {
@@ -45,7 +49,7 @@ Local.prototype.loadJs = function (name, url, version, callback) {
                             }
                         }
                         else {
-                            self.linkJs(name, url, callback);
+                            self.linkJs(name, url + "?v=" + version, callback);
                         }
                     }
                 };
@@ -59,7 +63,7 @@ Local.prototype.loadJs = function (name, url, version, callback) {
             }
         }
     } else {
-        self.linkJs(name, url);
+        self.linkJs(name, url + "?v=" + version);
     }
 };
 
@@ -69,22 +73,23 @@ Local.prototype.loadCss = function (name, url, version) {
         var xhr;
         var css = localStorage.getItem(name);
         // 如果没有版本更新，检测是否已经创建标签
-        if (js != null && js.length > 0 && version == localStorage.getItem(name + "version")) {
-            var link = document.getElementsByClassName(name);
+        var link = document.getElementsByClassName(name);
+        if (js != null && js.length > 0) {
             if (link.length > 0 && link[0].getAttribute("version") == this.version) {
                 return;
             }
             self.writeCss(name, js);
             return;
         }
-        if (css == null || css.length == 0 || version != localStorage.getItem(name + "version")) {
+        if (css == null || css.length == 0 || version != localStorage.getItem(name + "version") ||
+            (link.length > 0 && link[0].getAttribute("version") != version)) {
             if (window.ActiveXObject) {
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
             } else if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
             }
             if (xhr != null) {
-                xhr.open("GET", url);
+                xhr.open("GET", url + "?v=" + version);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200) {
@@ -95,7 +100,7 @@ Local.prototype.loadCss = function (name, url, version) {
                             self.writeCss(name, css);
                         }
                         else {
-                            self.linkCss(name, url, callback);
+                            self.linkCss(name, url + "?v=" + version, callback);
                         }
 
                     }
@@ -104,13 +109,19 @@ Local.prototype.loadCss = function (name, url, version) {
             }
         }
     } else {
-        self.linkCss(name, url);
+        self.linkCss(name, url + "?v=" + version);
     }
 };
 
 Local.prototype.writeJs = function (name, text) {
     // 检测是否已经存在标签
-    var head = document.getElementsByTagName('body').item(0);
+    var head = null;
+    if (this.power == "private") {
+        head = document.getElementsByClassName('page-script').item(0);
+    }
+    else if (this.power == "public") {
+        head = document.getElementsByClassName('public-script').item(0);
+    }
     var link = document.getElementsByClassName(name);
     if (link.length > 0) {
         link[0].innerHTML = text;
@@ -126,7 +137,7 @@ Local.prototype.writeJs = function (name, text) {
 }
 
 Local.prototype.writeCss = function (name, text) {
-    var head = document.getElementsByTagName('body').item(0);
+    var head = document.getElementsByTagName('HEAD').item(0);
     var link = document.getElementsByClassName(name);
     if (link.length > 0) {
         link[0].innerHTML = text;
@@ -142,7 +153,13 @@ Local.prototype.writeCss = function (name, text) {
 }
 
 Local.prototype.linkJs = function (name, url, callback) {
-    var head = document.getElementsByTagName('HEAD').item(0);
+    var head = null;
+    if (this.power == "private") {
+        head = document.getElementsByClassName('page-script').item(0);
+    }
+    else if (this.power == "public") {
+        head = document.getElementsByClassName('public-script').item(0);
+    }
     var link = document.createElement("script");
     link.type = "text/javascript";
     link.className = name;
@@ -154,7 +171,7 @@ Local.prototype.linkJs = function (name, url, callback) {
 }
 
 Local.prototype.linkCss = function (name, url, callback) {
-    var head = document.getElementsByTagName('HEAD').item(0);
+    var head = document.getElementsByClassName('HEAD').item(0);
     var link = document.createElement("link");
     link.type = "text/css";
     link.rel = "stylesheet";
