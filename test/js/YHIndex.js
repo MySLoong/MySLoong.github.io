@@ -1,7 +1,7 @@
 ﻿/////////////////////////////////////////////////////////////////////////////
 // 保存指定网页内容
-var SavePage = function (pageName) {
-    if (typeof (Storage) == "undefined" || typeof (JSON) == "undefined" || typeof pageName != "string" || pageName.length <= 0) {
+var SavePage = function (pageName,pageVersion) {
+    if (typeof (window.localStorage) == "undefined" || typeof (JSON) == "undefined" || typeof pageName != "string" || pageName.length <= 0) {
         return false;
     }
     var PageList = null;
@@ -16,20 +16,21 @@ var SavePage = function (pageName) {
     }
     PageList = JSON.parse(localStorage.PageList);
     pageName = pageName.replace(/-/g, "_");
-    if (typeof PageList[pageName] == "object" && eval(PageList[pageName].PageCheck)) {
+    if (typeof PageList[pageName] == "object" && eval(PageList[pageName].PageCheck) && PageList[pageName].PageVersion == pageVersion) {
         return false;
     }
     // 注册当前页
     PageList[pageName] = {
         PageName: pageName,
-        PageCheck: "PageCheck('" + pageName + "')"
+        PageCheck: "PageCheck('" + pageName + "')",
+        PageVersion:pageVersion
     };
     localStorage.PageList = JSON.stringify(PageList);
 
     // 写入当前页
     var PageInfo = {
         PageHead: $("head").html(),
-        PageBody: $("body").html(),
+        PageBody: $("body").html()
     };
     eval("(localStorage." + pageName + "=JSON.stringify(PageInfo))");
 }
@@ -65,7 +66,7 @@ var PageCheck = function (pageNname) {
 // 从本地储存中读取指定网页
 var LoadPage = function (pageName, pageUrl) {
     pageName = pageName.replace(/-/g, "_");
-    if (typeof (Storage) != "undefined" && typeof (JSON) != "undefined") {
+    if (typeof (window.localStorage) != "undefined" && typeof (JSON) != "undefined") {
         var PageList = null;
         if (!localStorage.PageList) {
             PageList: { };
@@ -85,11 +86,12 @@ var LoadPage = function (pageName, pageUrl) {
         if (typeof strName == "string" && strName == pageName) {
             return false;
         }
-        $("body").html("");
+        //$("body").html("");
         //$("head").html("");
         //$("head").html(PageInfo.PageHead);
-        $("body").html(PageInfo.PageBody);
         $("body").attr("class", pageName);
+        $("body").attr("version", PageList[pageName].PageVersion)
+        $("body").html(PageInfo.PageBody);
     }
 }
 
@@ -101,6 +103,7 @@ $(function () {
         if ($(this).find(".sub").length <= 0) {
             $(this).attr("class", "active");
         }
+        window.location.href = window.location.href + "#" + pageName;
         return false;
     }
     $(".menu-1").find("li").one("click", liClick);
