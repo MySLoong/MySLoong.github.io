@@ -2,7 +2,7 @@
    Author ZhouJT(jason_zhou05@163.com) 2016
 */
 var Local = function (power) {
-    this.version = 10093;
+    this.version = 10094;
     if (typeof power == "string") {
         this.power = power;
     }
@@ -17,7 +17,7 @@ Local.prototype.loadJs = function (name, url, version, callback) {
     if (window.localStorage) {
         var xhr;
         var js = localStorage.getItem(name);
-        // Èç¹ûÃ»ÓĞ°æ±¾¸üĞÂ£¬¼ì²âÊÇ·ñÒÑ¾­´´½¨±êÇ©
+        // å¦‚æœæ²¡æœ‰ç‰ˆæœ¬æ›´æ–°ï¼Œæ£€æµ‹æ˜¯å¦å·²ç»åˆ›å»ºæ ‡ç­¾
         var link = document.getElementsByClassName(name);
         if (js != null && js.length > 0) {
             if (link.length > 0 && link[0].getAttribute("version") == version) {
@@ -72,7 +72,7 @@ Local.prototype.loadCss = function (name, url, version) {
     if (window.localStorage) {
         var xhr;
         var css = localStorage.getItem(name);
-        // Èç¹ûÃ»ÓĞ°æ±¾¸üĞÂ£¬¼ì²âÊÇ·ñÒÑ¾­´´½¨±êÇ©
+        // å¦‚æœæ²¡æœ‰ç‰ˆæœ¬æ›´æ–°ï¼Œæ£€æµ‹æ˜¯å¦å·²ç»åˆ›å»ºæ ‡ç­¾
         var link = document.getElementsByClassName(name);
         if (js != null && js.length > 0) {
             if (link.length > 0 && link[0].getAttribute("version") == this.version) {
@@ -114,7 +114,7 @@ Local.prototype.loadCss = function (name, url, version) {
 };
 
 Local.prototype.writeJs = function (name, text) {
-    // ¼ì²âÊÇ·ñÒÑ¾­´æÔÚ±êÇ©
+    // æ£€æµ‹æ˜¯å¦å·²ç»å­˜åœ¨æ ‡ç­¾
     var head = null;
     if (this.power == "private") {
         head = document.getElementsByClassName('page-script').item(0);
